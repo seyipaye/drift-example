@@ -12,9 +12,12 @@ class MyApp extends StatelessWidget {
 
   MyApp({super.key});
 
-  Future<void> callNativeMethod() async {
+Future<void> callNativeMethod(String name, String email) async {
     try {
-      final String result = await platform.invokeMethod('nativeMethod');
+      final String result = await platform.invokeMethod(
+        'nativeMethod',
+        {"name": name, "email": email}, // Sending name & email as arguments
+      );
       print('Swift response: $result');
     } on PlatformException catch (e) {
       print('Failed to call native method: ${e.message}');
@@ -51,7 +54,7 @@ class MyApp extends StatelessWidget {
             children: <Widget>[
               FloatingActionButton(
                 onPressed: () {
-                  callNativeMethod();
+callNativeMethod("Seyi123", "seyipaye123@gmail.com");
                 },
                 child: Icon(Icons.arrow_back),
               ),
