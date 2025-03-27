@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'db/services/user_service.dart';
 
 void main() {
@@ -7,8 +8,18 @@ void main() {
 
 class MyApp extends StatelessWidget {
   final UserService userService = UserService();
+  static const platform = MethodChannel('com.example.myapp/methods');
 
   MyApp({super.key});
+
+  Future<void> callNativeMethod() async {
+    try {
+      final String result = await platform.invokeMethod('nativeMethod');
+      print('Swift response: $result');
+    } on PlatformException catch (e) {
+      print('Failed to call native method: ${e.message}');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,12 +43,28 @@ class MyApp extends StatelessWidget {
             );
           },
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            await userService.insertUser(
-                "Yash Tiwari", "yashtiwari@example.com");
-          },
-          child: const Icon(Icons.add),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: Container(
+          padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              FloatingActionButton(
+                onPressed: () {
+                  callNativeMethod();
+                },
+                child: Icon(Icons.arrow_back),
+              ),
+              FloatingActionButton(
+                onPressed: () async {
+                  print("Sddsdsd");
+                  await userService.insertUser(
+                      "Sey3 Ipaye", "Seyipaye3@example.com");
+                },
+                child: const Icon(Icons.add),
+              ),
+            ],
+          ),
         ),
       ),
     );

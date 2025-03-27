@@ -13,11 +13,14 @@ LazyDatabase _openConnection() {
   return LazyDatabase(() async {
     final dir = await getApplicationDocumentsDirectory();
     final dbFile = File(p.join(dir.path, 'app.db'));
+    print("Flutter: $dir");
     return NativeDatabase.createInBackground(dbFile);
   });
 }
 
-@DriftDatabase(tables: [Users,])
+@DriftDatabase(tables: [
+  Users,
+])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
